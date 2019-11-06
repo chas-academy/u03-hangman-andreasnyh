@@ -9,7 +9,7 @@ let hangmanImg; // Sträng: sökväg till bild som kommer visas (och ändras) fe
 let msgHolderEl; // DOM-nod: Ger meddelande när spelet är över
 let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-nod: knappen som du startar spelet med
 let letterButtonEls; // Array av DOM-noder: Knapparna för bokstäverna
-let letterBoxEls; // Array av DOM-noder: Rutorna där bokstäverna ska stå
+let letterBoxEls = document.querySelector('#letterBoxes > ul'); // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
 // Funktion som startar spelet vid knapptryckning, och då tillkallas andra funktioner
 // Funktion som slumpar fram ett ord
@@ -55,3 +55,9 @@ function generateRandomWord() {
   console.log(
   wordList[Math.floor(Math.random() * wordList.length)]);
 }
+
+function createLetterBoxes() {
+  
+}
+
+// letterBoxEls.style='background-color: red';
