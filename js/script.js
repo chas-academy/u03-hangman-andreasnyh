@@ -20,9 +20,11 @@ let letterBoxEls;    // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
  // Get array of words from file
 let wordsFromTxt = null;
+const urlEng = "../assets/words.txt";
+const urlSwe = "../assets/wordsSWE.txt";
 
 let xhr=new XMLHttpRequest();
-xhr.open("GET","../assets/words.txt",false); // False turns off asynchronous behaviour
+xhr.open("GET", urlSwe, false); // False turns off asynchronous behaviour
 xhr.onload=function(){
     // wordsFromTxt = xhr.responseText;
     wordsFromTxt = xhr.responseText.toUpperCase();
@@ -35,9 +37,10 @@ const wordList = wordsFromTxt;
 
 // console.log(wordList);
 
+// Listen for clicks on startbutton
+startGameBtnEl.addEventListener('click', startGame);
+
 // startGameBtnEl.onclick = 
-function click() {
+function startGame() {
     console.log("du klickade start!");
 };
-
-startGameBtnEl.addEventListener('click', startGame);
