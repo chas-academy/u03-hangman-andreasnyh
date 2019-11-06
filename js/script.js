@@ -1,6 +1,6 @@
 // Globala variabler
 
-let wordList = [];      // Array: med spelets alla ord
+//const wordList;      // Array: med spelets alla ord
 let selectedWord;    // Sträng: ett av orden valt av en slumpgenerator från arrayen ovan
 
 let guesses = 0;     // Number: håller antalet gissningar som gjorts
@@ -13,18 +13,24 @@ let letterBoxEls;    // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
 // Funktion som startar spelet vid knapptryckning, och då tillkallas andra funktioner
 // Funktion som slumpar fram ett ord
-// Funktion som tar fram bokstävernas rutor, antal rutor beror på vilket ord slumptas fram
+// Funktion som tar fram bokstävernas rutor, antal rutor beror på vilket ord slumpas fram
 // Funktion som körs när du trycker på bokstäverna och gissar bokstav
 // Funktion som ropas vid vinst eller förlust, gör olika saker beroende tillståndet
 // Funktion som inaktiverar/aktiverar bokstavsknapparna beroende på vilken del av spelet du är på
 
-var xhr=new XMLHttpRequest();
-xhr.open("GET","../assets/words.txt");
+ // Get array of words from file
+let wordsFromTxt = null;
+
+let xhr=new XMLHttpRequest();
+xhr.open("GET","../assets/words.txt",false); // False turns off asynchronous behaviour
 xhr.onload=function(){
-    wordList = xhr.responseText;
-    wordList = wordList.split('\n');
-    console.log(wordList);
+    // wordsFromTxt = xhr.responseText;
+    wordsFromTxt = xhr.responseText.toUpperCase();
+    wordsFromTxt = wordsFromTxt.split('\n');
+    // console.log(wordsFromTxt);
 }
 xhr.send();
 
-// console.log(wordList);
+const wordList = wordsFromTxt;
+
+console.log(wordList);
