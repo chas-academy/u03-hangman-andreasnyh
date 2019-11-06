@@ -7,7 +7,7 @@ let guesses = 0;     // Number: håller antalet gissningar som gjorts
 let hangmanImg;      // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
 
 let msgHolderEl;     // DOM-nod: Ger meddelande när spelet är över
-let startGameBtnEl;  // DOM-nod: knappen som du startar spelet med
+let startGameBtnEl = document.getElementById('startGameBtn');  // DOM-nod: knappen som du startar spelet med
 let letterButtonEls; // Array av DOM-noder: Knapparna för bokstäverna
 let letterBoxEls;    // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
@@ -33,4 +33,11 @@ xhr.send();
 
 const wordList = wordsFromTxt;
 
-console.log(wordList);
+// console.log(wordList);
+
+// startGameBtnEl.onclick = 
+function click() {
+    console.log("du klickade start!");
+};
+
+startGameBtnEl.addEventListener('click', startGame);
