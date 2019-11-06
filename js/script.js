@@ -17,3 +17,5 @@ let letterBoxEls;    // Array av DOM-noder: Rutorna där bokstäverna ska stå
 // Funktion som körs när du trycker på bokstäverna och gissar bokstav
 // Funktion som ropas vid vinst eller förlust, gör olika saker beroende tillståndet
 // Funktion som inaktiverar/aktiverar bokstavsknapparna beroende på vilken del av spelet du är på
+
+
