@@ -33,18 +33,29 @@ xhr.onload = function() {
 };
 xhr.send();
 
-const wordList = wordsFromTxt;
+/*
+function removeWordsContainingDash(item) {
+  if (item.includes("-")) {
+    splice(item, 1);
+  }
+  return;
+}
+*/
+// const wordList = wordsFromTxt.filter(removeWordsContainingDash);
 
-// console.log(wordList);
+// Save wordsFromText items, that does not include a '-' in wordList 
+const wordList = wordsFromTxt.filter(item => !item.includes("-"));
+
+
+console.log(wordList);
 
 // Listen for clicks on startbutton
 startGameBtnEl.addEventListener("click", startGame);
 
 // startGameBtnEl.onclick =
 function startGame() {
-  console.log("du klickade start!");
   generateRandomWord();
-}
+};
 
 /*
 Skapa en funktion, kalla den för generateRandomWord().
@@ -54,10 +65,10 @@ Inuti denna funktion returnera ett slumpat ord ur arrayen av ord (wordList):
 function generateRandomWord() {
   console.log(
   wordList[Math.floor(Math.random() * wordList.length)]);
-}
+};
 
 function createLetterBoxes() {
   
-}
+};
 
 // letterBoxEls.style='background-color: red';
