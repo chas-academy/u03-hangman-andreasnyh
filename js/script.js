@@ -46,8 +46,8 @@ function removeWordsContainingDash(item) {
 // Save wordsFromText items, that does not include a '-' in wordList 
 const wordList = wordsFromTxt.filter(item => !item.includes("-"));
 
-
-console.log(wordList);
+// Log wordList array
+// console.log(wordList);
 
 // Listen for clicks on startbutton
 startGameBtnEl.addEventListener("click", startGame);
@@ -55,6 +55,7 @@ startGameBtnEl.addEventListener("click", startGame);
 // startGameBtnEl.onclick =
 function startGame() {
   generateRandomWord();
+  createLetterBoxes();
 };
 
 /*
@@ -63,12 +64,32 @@ Inuti denna funktion returnera ett slumpat ord ur arrayen av ord (wordList):
 `wordList[Math.floor(Math.random()*wordList.length)];`
 */
 function generateRandomWord() {
-  console.log(
-  wordList[Math.floor(Math.random() * wordList.length)]);
+  selectedWord = wordList[Math.floor(Math.random() * wordList.length)];
+
+  // Disable the start button after click
+  // startGameBtnEl.disabled = true;
+
+  return selectedWord;
 };
+
+/*
+Baserat på längden i `selectedWord` (loopa/iterera):
+skapa ett nytt `<li>` element innehåller en `<input>`
+Använd `.appendChild()` för att lägga till det skapade elementet inuti `letterBoxEls`
+*/
 
 function createLetterBoxes() {
-  
-};
 
-// letterBoxEls.style='background-color: red';
+  letterBoxEls.innerHTML = '';
+
+  for (let i = 0; i < selectedWord.length; i++) {
+    // console.log(selectedWord[i]);
+    let liEl = document.createElement('li');
+    let liElInput = document.createElement('input');
+    liElInput.setAttribute('type', 'text');
+    liElInput.setAttribute('disabled', "true");
+    liElInput.setAttribute('value', selectedWord[i]);
+    liEl.appendChild(liElInput);
+    letterBoxEls.appendChild(liEl);
+  }
+};
