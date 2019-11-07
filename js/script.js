@@ -8,7 +8,7 @@ let hangmanImg; // Sträng: sökväg till bild som kommer visas (och ändras) fe
 
 let msgHolderEl; // DOM-nod: Ger meddelande när spelet är över
 let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-nod: knappen som du startar spelet med
-let letterButtonEls; // Array av DOM-noder: Knapparna för bokstäverna
+let letterButtonEls = document.querySelectorAll('#letterButtons button'); // Array av DOM-noder: Knapparna för bokstäverna
 let letterBoxEls = document.querySelector('#letterBoxes > ul'); // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
 // Funktion som startar spelet vid knapptryckning, och då tillkallas andra funktioner
@@ -87,9 +87,19 @@ function createLetterBoxes() {
     let liEl = document.createElement('li');
     let liElInput = document.createElement('input');
     liElInput.setAttribute('type', 'text');
-    liElInput.setAttribute('disabled', "true");
-    liElInput.setAttribute('value', selectedWord[i]);
+    liElInput.setAttribute('value', '');
+    liElInput.setAttribute('disabled', '');
     liEl.appendChild(liElInput);
     letterBoxEls.appendChild(liEl);
   }
 };
+
+// Listen to clicks on letters
+letterButtonEls.forEach(letter => {
+
+  letter.addEventListener('click', function() {
+    console.log(letter.value);
+  });
+  
+});
+
