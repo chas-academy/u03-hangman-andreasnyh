@@ -143,6 +143,7 @@ debugger;
   ) {
     // console.log(selectedWordArray.find(letterValue));
 
+    // Returns an array of positions in selectedWordArray where letterValue is present 
     getLetterIndex(selectedWordArray, letterValue);
 
     rightGuesses++;
