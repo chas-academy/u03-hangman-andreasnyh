@@ -3,6 +3,7 @@
 //const wordList;      // Array: med spelets alla ord
 let selectedWord; // Sträng: ett av orden valt av en slumpgenerator från arrayen ovan
 
+let rightGuesses = 0;
 let guesses = 0; // Number: håller antalet gissningar som gjorts
 let hangmanImg; // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
 
@@ -103,57 +104,82 @@ function createLetterBoxes() {
 letterButtonEls.forEach(letter => {
   letter.addEventListener("click", function() {
     // console.log(selectedWord.split(''));
-    
-    checkLetterValue2(letter.value);
 
+    checkLetterValue2(selectedWord, letter.value);
   });
 });
 
 function checkLetterValue(letterValue) {
   // console.log(letterValue);
-  
+
   switch (letterValue) {
-    case 'A':
-    case 'a':
-          console.log(selectedWord);
+    case "A":
+    case "a":
+      console.log(selectedWord);
       break;
-  
+
     default:
       console.log("Ej godkänd bokstav");
-      
+
       break;
   }
 }
 
 // callback
 // 6.1 check letter value
-/*
-let callback = function (letter) {
 
-  console.log(letter);
-  debugger;
-}
-*/
-
-function checkLetterValue2(letterValue) {
-
-  selectedWordArray = selectedWord.split(''); // split word into array
-  selectedWordArray.pop(); // remove last position, unwanted " "
-  console.log(selectedWord);
+function checkLetterValue2(word, letterValue) {
   
-  // selectedWordArray.forEach(letter => {
+  let selectedWordArray = word.split(""); // split word into array
+  selectedWordArray.pop(); // remove last position, unwanted " "
+  console.log(selectedWordArray);
 
-    if (selectedWordArray.includes(letterValue) && guesses < 6) {
-      console.log(selectedWordArray.find(letterValue));
-      
-      
-    } else if (!selectedWordArray.includes(letterValue) && guesses < 6){
-      guesses++;
-      console.log(guesses);
-    } else {
-      console.log("Game Över");
-      
-    }
-    
+  // selectedWordArray.forEach(letter => {
+debugger;
+  if (
+    selectedWordArray.includes(letterValue) === true &&
+    guesses < 5
+    //&& selectedWordArray.length !== 0
+  ) {
+    // console.log(selectedWordArray.find(letterValue));
+
+    getLetterIndex(selectedWordArray, letterValue);
+
+    rightGuesses++;
+
+    console.log(`Letter: ${letterValue} right guess nr: ${rightGuesses}`);
+    /*
+      let letterPos = selectedWordArray.reduce(function (accumulator, letterValue, position) {
+        if (letterValue) {
+          let accumulator = accumulator.push(position);
+          return accumulator;
+        }
+      });
+      */
+  } else if (selectedWordArray.includes(letterValue) === false && guesses < 5) {
+    guesses++;
+    console.log(guesses);
+  } else if (
+    selectedWordArray.includes(letterValue) &&
+    guesses < 5 &&
+    selectedWordArray.length === 0
+  ) {
+    console.log("Du vann!");
+  } else {
+    console.log("Game Över");
+  }
+
   // });
-};
+}
+
+function getLetterIndex(array, value) {
+  let letterIndex = [];
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === value) {
+      letterIndex.push(i);
+    }
+  }
+
+  return letterIndex;
+}
