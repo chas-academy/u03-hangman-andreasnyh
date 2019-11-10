@@ -6,9 +6,9 @@ let letterIndex = [];
 
 let rightGuesses = 0;
 let guesses = 0; // Number: håller antalet gissningar som gjorts
-let hangmanImg; // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
+let hangmanImg = document.getElementById("hangman"); // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
 
-let msgHolderEl; // DOM-nod: Ger meddelande när spelet är över
+let msgHolderEl = document.getElementById("message"); // DOM-nod: Ger meddelande när spelet är över
 let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-nod: knappen som du startar spelet med
 let letterButtonEls = document.querySelectorAll("#letterButtons button"); // Array av DOM-noder: Knapparna för bokstäverna
 let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array av DOM-noder: Rutorna där bokstäverna ska stå
@@ -101,6 +101,32 @@ function createLetterBoxes() {
   }
 }
 
+function youWon() {
+  disableLetters();
+  // console.log(selectedWord[i]);
+  let msgHeading = document.createElement("h2");
+  let msgParagraph = document.createElement("p");
+  // msgHeading.setAttribute("class", );
+  // liElInput.setAttribute("value", selectedWord[i]);
+  msgHeading.innerText = "Du vann!";
+  msgParagraph.innerText = "Vill du spela igen?";
+  msgHolderEl.appendChild(msgHeading); // make the input a child of the list-element
+  msgHolderEl.appendChild(msgParagraph); // make the list and input a child of letterbox
+}
+
+function gameOver() {
+  disableLetters();
+
+  
+}
+
+function disableLetters() {
+  letterButtonEls.forEach(letter => {
+    letter.disabled = true;
+  });
+}
+
+
 // Listen to clicks on letters
 letterButtonEls.forEach(letter => {
   letter.addEventListener("click", function() {
@@ -110,24 +136,6 @@ letterButtonEls.forEach(letter => {
     // letter.disabled = true;
   });
 });
-
-/*
-function checkLetterValue(letterValue) {
-  // console.log(letterValue);
-
-  switch (letterValue) {
-    case "A":
-    case "a":
-      console.log(selectedWord);
-      break;
-
-    default:
-      console.log("Ej godkänd bokstav");
-
-      break;
-  }
-}
-*/
 
 // callback
 // 6.1 check letter value
@@ -140,7 +148,7 @@ function checkLetterValue2(word, letter, letterValue) {
   if (
     // Letter exists guesses lower than five and right guesses not equal to length of word
     selectedWordArray.includes(letterValue) === true &&
-    guesses < 5 &&
+    guesses < 6 &&
     selectedWordArray.length !== rightGuesses
   ) {
     // console.log(selectedWordArray.find(letterValue));
@@ -150,31 +158,29 @@ function checkLetterValue2(word, letter, letterValue) {
 
     rightGuesses = rightGuesses + letterIndex.length;
 
+    // Loop to display correctly guessed letters
     for (let i = 0; i < letterIndex.length; i++) {
       let pos = letterIndex[i];
-      // debugger;
       letterBoxEls.childNodes[pos].firstChild.value = letterValue;
-      
     }
 
     console.log(
       `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
     );
-    // debugger;
-    if (
-      selectedWordArray.includes(letterValue) === true &&
-      guesses < 5 &&
-      selectedWordArray.length === rightGuesses
-    ) {
-      console.log("Du vann!");
+
+    // Internal if to check if WIN
+    if (guesses < 6 && selectedWordArray.length === rightGuesses) {
+      youWon();
     }
-  } else if (selectedWordArray.includes(letterValue) === false && guesses < 5) {
+  } else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
     guesses++;
+    hangmanImg.src = `images/h${guesses}.png`;
     console.log(guesses);
-  } else if (guesses >= 5) {
-    
-    console.log("You lose");
-    // gameOver(); // write this function
+
+    if (guesses === 6) {
+      console.log("You lose");
+      gameOver(); // write this function
+    }
   }
 
   // });
