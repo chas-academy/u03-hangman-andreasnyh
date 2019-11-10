@@ -2,6 +2,7 @@
 
 //const wordList;      // Array: med spelets alla ord
 let selectedWord; // Sträng: ett av orden valt av en slumpgenerator från arrayen ovan
+let letterIndex = [];
 
 let rightGuesses = 0;
 let guesses = 0; // Number: håller antalet gissningar som gjorts
@@ -74,7 +75,7 @@ function generateRandomWord() {
 
   // Disable the start button after click
   // startGameBtnEl.disabled = true;
-
+  console.log(selectedWord);
   return selectedWord;
 }
 
@@ -92,7 +93,7 @@ function createLetterBoxes() {
     let liEl = document.createElement("li");
     let liElInput = document.createElement("input");
     liElInput.setAttribute("type", "text");
-    liElInput.setAttribute("value", selectedWord[i]);
+    // liElInput.setAttribute("value", selectedWord[i]);
     liElInput.setAttribute("placeholder", "__");
     liElInput.setAttribute("disabled", "");
     liEl.appendChild(liElInput); // make the input a child of the list-element
@@ -105,10 +106,12 @@ letterButtonEls.forEach(letter => {
   letter.addEventListener("click", function() {
     // console.log(selectedWord.split(''));
 
-    checkLetterValue2(selectedWord, letter.value);
+    checkLetterValue2(selectedWord, letter, letter.value);
+    // letter.disabled = true;
   });
 });
 
+/*
 function checkLetterValue(letterValue) {
   // console.log(letterValue);
 
@@ -124,32 +127,71 @@ function checkLetterValue(letterValue) {
       break;
   }
 }
+*/
 
 // callback
 // 6.1 check letter value
 
-function checkLetterValue2(word, letterValue) {
-  
+function checkLetterValue2(word, letter, letterValue) {
   let selectedWordArray = word.split(""); // split word into array
   selectedWordArray.pop(); // remove last position, unwanted " "
   console.log(selectedWordArray);
 
-  // selectedWordArray.forEach(letter => {
-debugger;
   if (
+    // Letter exists guesses lower than five and right guesses not equal to length of word
     selectedWordArray.includes(letterValue) === true &&
-    guesses < 5
-    //&& selectedWordArray.length !== 0
+    guesses < 5 &&
+    selectedWordArray.length !== rightGuesses
   ) {
     // console.log(selectedWordArray.find(letterValue));
-
-    // Returns an array of positions in selectedWordArray where letterValue is present 
+    letter.disabled = true;
+    // Returns an array of positions in selectedWordArray where letterValue is present
     getLetterIndex(selectedWordArray, letterValue);
 
-    rightGuesses++;
+    rightGuesses = rightGuesses + letterIndex.length;
 
-    console.log(`Letter: ${letterValue} right guess nr: ${rightGuesses}`);
-    /*
+    for (let i = 0; i < letterIndex.length; i++) {
+      let pos = letterIndex[i];
+      // debugger;
+      letterBoxEls.childNodes[pos].firstChild.value = letterValue;
+      
+    }
+
+    console.log(
+      `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
+    );
+    // debugger;
+    if (
+      selectedWordArray.includes(letterValue) === true &&
+      guesses < 5 &&
+      selectedWordArray.length === rightGuesses
+    ) {
+      console.log("Du vann!");
+    }
+  } else if (selectedWordArray.includes(letterValue) === false && guesses < 5) {
+    guesses++;
+    console.log(guesses);
+  } else if (guesses >= 5) {
+    
+    console.log("You lose");
+    // gameOver(); // write this function
+  }
+
+  // });
+}
+
+function getLetterIndex(array, value) {
+  letterIndex = [];
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === value) {
+      letterIndex.push(i);
+    }
+  }
+  return letterIndex;
+}
+
+/*
       let letterPos = selectedWordArray.reduce(function (accumulator, letterValue, position) {
         if (letterValue) {
           let accumulator = accumulator.push(position);
@@ -157,30 +199,3 @@ debugger;
         }
       });
       */
-  } else if (selectedWordArray.includes(letterValue) === false && guesses < 5) {
-    guesses++;
-    console.log(guesses);
-  } else if (
-    selectedWordArray.includes(letterValue) &&
-    guesses < 5 &&
-    selectedWordArray.length === 0
-  ) {
-    console.log("Du vann!");
-  } else {
-    console.log("Game Över");
-  }
-
-  // });
-}
-
-function getLetterIndex(array, value) {
-  let letterIndex = [];
-
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] === value) {
-      letterIndex.push(i);
-    }
-  }
-
-  return letterIndex;
-}
