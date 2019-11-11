@@ -101,9 +101,8 @@ function createLetterBoxes() {
   }
 }
 
-function youWon() {
-  disableLetters();
-  // console.log(selectedWord[i]);
+function createMessage(message) {
+
   let msgArticle = document.createElement("article");
   let msgHeading = document.createElement("h2");
   let msgParagraph = document.createElement("p");
@@ -114,7 +113,7 @@ function youWon() {
 
   msgArticle.setAttribute("id", "messageArticle");
 
-  msgHeading.innerText = "Du vann!";
+  msgHeading.innerText = message;
   msgParagraph.innerText = "Vill du spela igen?";
   msgArticle.appendChild(msgHeading); // make the input a child of the list-element
   msgArticle.appendChild(msgParagraph); // make the input a child of the list-element
@@ -130,12 +129,12 @@ function youWon() {
   msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnNo.setAttribute("value", "NEJ");
 
-
   msgBtnDiv.appendChild(msgBtnYes);
   msgBtnDiv.appendChild(msgBtnNo);
   msgArticle.appendChild(msgBtnDiv);
 
   msgHolderEl.style.visibility = "visible";
+
   // Listen to yes or no to restart the game
   // let restartBtn = document.querySelectorAll("restartBtn");
   msgBtnYes.addEventListener("click", function() {
@@ -147,8 +146,16 @@ function youWon() {
   });
 }
 
+function youWon() {
+  disableLetters();
+  createMessage("Du vann!");
+  // console.log(selectedWord[i]);
+  
+}
+
 function gameOver() {
   disableLetters();
+  createMessage("Bättre lycka nästa gång");
 }
 
 function enableLetters() {
