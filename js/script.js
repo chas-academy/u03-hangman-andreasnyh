@@ -59,8 +59,8 @@ const wordList = wordsFromTxt.filter(item => !item.includes("-"));
 // Listen for clicks on startbutton
 startGameBtnEl.addEventListener("click", startGame);
 
-// startGameBtnEl.onclick =
 function startGame() {
+  startGameBtnEl.innerHTML = "Slumpa nytt ord"
   generateRandomWord();
   createLetterBoxes();
 }
@@ -120,14 +120,27 @@ function youWon() {
   msgHolderEl.appendChild(msgArticle); // make the list and input a child of letterbox
 
   msgBtnYes.setAttribute("type", "button");
-  msgBtnYes.setAttribute("class", "msgBtnYes btn btn--stripe");
-  msgBtnYes.setAttribute("value", "Ja");
+  msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
+  msgBtnYes.setAttribute("value", "JA");
+ 
   msgBtnNo.setAttribute("type", "button");
-  msgBtnNo.setAttribute("class", "btn btn--stripe");
-  msgBtnNo.setAttribute("value", "Nej");
+  msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
+  msgBtnNo.setAttribute("value", "NEJ");  
+
 
   msgHolderEl.appendChild(msgBtnYes);
   msgHolderEl.appendChild(msgBtnNo);
+
+  msgHolderEl.style.visibility = "visible";
+  // Listen to yes or no to restart the game
+// let restartBtn = document.querySelectorAll("restartBtn");
+msgBtnYes.addEventListener("click", function() {
+    reset();
+  });
+
+  msgBtnNo.addEventListener("click", function() {
+    window.location = "https://chasacademy.se/";
+  });
 }
 
 function gameOver() {
@@ -136,10 +149,27 @@ function gameOver() {
   
 }
 
+function enableLetters() {
+  letterButtonEls.forEach(letter => {
+    letter.disabled = false;
+  });
+}
+
 function disableLetters() {
   letterButtonEls.forEach(letter => {
     letter.disabled = true;
   });
+}
+
+function reset() {
+  msgHolderEl.style.visibility = "hidden";
+  startGameBtnEl.disabled = false;
+  startGameBtnEl.innerHTML = "Starta spelet";
+  rightGuesses = 0;
+  guesses = 0;
+  hangmanImg.src = `images/h${guesses}.png`;
+  enableLetters();
+  startGame();
 }
 
 
@@ -147,7 +177,7 @@ function disableLetters() {
 letterButtonEls.forEach(letter => {
   letter.addEventListener("click", function() {
     // console.log(selectedWord.split(''));
-
+    startGameBtnEl.disabled = true;
     checkLetterValue2(selectedWord, letter, letter.value);
     // letter.disabled = true;
   });
