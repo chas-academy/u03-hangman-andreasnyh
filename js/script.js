@@ -104,14 +104,30 @@ function createLetterBoxes() {
 function youWon() {
   disableLetters();
   // console.log(selectedWord[i]);
+  let msgArticle = document.createElement("article");
   let msgHeading = document.createElement("h2");
   let msgParagraph = document.createElement("p");
-  // msgHeading.setAttribute("class", );
-  // liElInput.setAttribute("value", selectedWord[i]);
+
+  let msgBtnYes = document.createElement("input");
+  let msgBtnNo = document.createElement("input");
+  
+  msgArticle.setAttribute("id", "messageArticle");
+
   msgHeading.innerText = "Du vann!";
   msgParagraph.innerText = "Vill du spela igen?";
-  msgHolderEl.appendChild(msgHeading); // make the input a child of the list-element
-  msgHolderEl.appendChild(msgParagraph); // make the list and input a child of letterbox
+  msgArticle.appendChild(msgHeading); // make the input a child of the list-element
+  msgArticle.appendChild(msgParagraph); // make the input a child of the list-element
+  msgHolderEl.appendChild(msgArticle); // make the list and input a child of letterbox
+
+  msgBtnYes.setAttribute("type", "button");
+  msgBtnYes.setAttribute("class", "msgBtnYes btn btn--stripe");
+  msgBtnYes.setAttribute("value", "Ja");
+  msgBtnNo.setAttribute("type", "button");
+  msgBtnNo.setAttribute("class", "btn btn--stripe");
+  msgBtnNo.setAttribute("value", "Nej");
+
+  msgHolderEl.appendChild(msgBtnYes);
+  msgHolderEl.appendChild(msgBtnNo);
 }
 
 function gameOver() {
