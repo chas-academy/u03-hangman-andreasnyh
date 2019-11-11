@@ -60,7 +60,7 @@ const wordList = wordsFromTxt.filter(item => !item.includes("-"));
 startGameBtnEl.addEventListener("click", startGame);
 
 function startGame() {
-  startGameBtnEl.innerHTML = "Slumpa nytt ord"
+  startGameBtnEl.innerHTML = "Slumpa nytt ord";
   generateRandomWord();
   createLetterBoxes();
 }
@@ -108,9 +108,10 @@ function youWon() {
   let msgHeading = document.createElement("h2");
   let msgParagraph = document.createElement("p");
 
+  let msgBtnDiv = document.createElement("div");
   let msgBtnYes = document.createElement("input");
   let msgBtnNo = document.createElement("input");
-  
+
   msgArticle.setAttribute("id", "messageArticle");
 
   msgHeading.innerText = "Du vann!";
@@ -119,22 +120,25 @@ function youWon() {
   msgArticle.appendChild(msgParagraph); // make the input a child of the list-element
   msgHolderEl.appendChild(msgArticle); // make the list and input a child of letterbox
 
+  msgBtnDiv.setAttribute("class", "messageBtnDiv");
+
   msgBtnYes.setAttribute("type", "button");
   msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnYes.setAttribute("value", "JA");
- 
+
   msgBtnNo.setAttribute("type", "button");
   msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
-  msgBtnNo.setAttribute("value", "NEJ");  
+  msgBtnNo.setAttribute("value", "NEJ");
 
 
-  msgHolderEl.appendChild(msgBtnYes);
-  msgHolderEl.appendChild(msgBtnNo);
+  msgBtnDiv.appendChild(msgBtnYes);
+  msgBtnDiv.appendChild(msgBtnNo);
+  msgArticle.appendChild(msgBtnDiv);
 
   msgHolderEl.style.visibility = "visible";
   // Listen to yes or no to restart the game
-// let restartBtn = document.querySelectorAll("restartBtn");
-msgBtnYes.addEventListener("click", function() {
+  // let restartBtn = document.querySelectorAll("restartBtn");
+  msgBtnYes.addEventListener("click", function() {
     reset();
   });
 
@@ -145,8 +149,6 @@ msgBtnYes.addEventListener("click", function() {
 
 function gameOver() {
   disableLetters();
-
-  
 }
 
 function enableLetters() {
@@ -171,7 +173,6 @@ function reset() {
   enableLetters();
   startGame();
 }
-
 
 // Listen to clicks on letters
 letterButtonEls.forEach(letter => {
