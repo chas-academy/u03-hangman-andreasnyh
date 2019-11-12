@@ -2,14 +2,16 @@
 
 //const wordList;      // Array: med spelets alla ord
 let selectedWord; // Sträng: ett av orden valt av en slumpgenerator från arrayen ovan
+let letterIndex = [];
 
+let rightGuesses = 0;
 let guesses = 0; // Number: håller antalet gissningar som gjorts
-let hangmanImg; // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
+let hangmanImg = document.getElementById("hangman"); // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
 
-let msgHolderEl; // DOM-nod: Ger meddelande när spelet är över
+let msgHolderEl = document.getElementById("message"); // DOM-nod: Ger meddelande när spelet är över
 let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-nod: knappen som du startar spelet med
-let letterButtonEls = document.querySelectorAll('#letterButtons button'); // Array av DOM-noder: Knapparna för bokstäverna
-let letterBoxEls = document.querySelector('#letterBoxes > ul'); // Array av DOM-noder: Rutorna där bokstäverna ska stå
+let letterButtonEls = document.querySelectorAll("#letterButtons button"); // Array av DOM-noder: Knapparna för bokstäverna
+let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
 // Funktion som startar spelet vid knapptryckning, och då tillkallas andra funktioner
 // Funktion som slumpar fram ett ord
@@ -43,7 +45,12 @@ function removeWordsContainingDash(item) {
 */
 // const wordList = wordsFromTxt.filter(removeWordsContainingDash);
 
-// Save wordsFromText items, that does not include a '-' in wordList 
+// Save wordsFromText items, that does not include a '-' in wordList
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("á"));
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("é"));
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("ó"));
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("'"));
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("ü"));
 const wordList = wordsFromTxt.filter(item => !item.includes("-"));
 
 // Log wordList array
@@ -52,11 +59,11 @@ const wordList = wordsFromTxt.filter(item => !item.includes("-"));
 // Listen for clicks on startbutton
 startGameBtnEl.addEventListener("click", startGame);
 
-// startGameBtnEl.onclick =
 function startGame() {
+  startGameBtnEl.innerHTML = "Slumpa nytt ord";
   generateRandomWord();
   createLetterBoxes();
-};
+}
 
 /*
 Skapa en funktion, kalla den för generateRandomWord().
@@ -68,9 +75,9 @@ function generateRandomWord() {
 
   // Disable the start button after click
   // startGameBtnEl.disabled = true;
-
+  console.log(selectedWord);
   return selectedWord;
-};
+}
 
 /*
 Baserat på längden i `selectedWord` (loopa/iterera):
@@ -79,27 +86,176 @@ Använd `.appendChild()` för att lägga till det skapade elementet inuti `lette
 */
 
 function createLetterBoxes() {
+  letterBoxEls.innerHTML = "";
 
-  letterBoxEls.innerHTML = '';
-
-  for (let i = 0; i < selectedWord.length; i++) {
+  for (let i = 0; i < selectedWord.length - 1; i++) {
     // console.log(selectedWord[i]);
-    let liEl = document.createElement('li');
-    let liElInput = document.createElement('input');
-    liElInput.setAttribute('type', 'text');
-    liElInput.setAttribute('value', '');
-    liElInput.setAttribute('disabled', '');
-    liEl.appendChild(liElInput);
-    letterBoxEls.appendChild(liEl);
+    let liEl = document.createElement("li");
+    let liElInput = document.createElement("input");
+    liElInput.setAttribute("type", "text");
+    // liElInput.setAttribute("value", selectedWord[i]);
+    liElInput.setAttribute("placeholder", "__");
+    liElInput.setAttribute("disabled", "");
+    liEl.appendChild(liElInput); // make the input a child of the list-element
+    letterBoxEls.appendChild(liEl); // make the list and input a child of letterbox
   }
-};
+}
+
+function createMessage(message) {
+
+  let msgArticle = document.createElement("article");
+  let msgHeading = document.createElement("h2");
+  let msgParagraph = document.createElement("p");
+
+  let msgBtnDiv = document.createElement("div");
+  let msgBtnYes = document.createElement("input");
+  let msgBtnNo = document.createElement("input");
+
+  msgArticle.setAttribute("id", "messageArticle");
+
+  msgHeading.innerText = message;
+  msgParagraph.innerText = "Vill du spela igen?";
+  msgArticle.appendChild(msgHeading); // make the input a child of the list-element
+  msgArticle.appendChild(msgParagraph); // make the input a child of the list-element
+  msgHolderEl.appendChild(msgArticle); // make the list and input a child of letterbox
+
+  msgBtnDiv.setAttribute("class", "messageBtnDiv");
+
+  msgBtnYes.setAttribute("type", "button");
+  msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
+  msgBtnYes.setAttribute("value", "JA");
+
+  msgBtnNo.setAttribute("type", "button");
+  msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
+  msgBtnNo.setAttribute("value", "NEJ");
+
+  msgBtnDiv.appendChild(msgBtnYes);
+  msgBtnDiv.appendChild(msgBtnNo);
+  msgArticle.appendChild(msgBtnDiv);
+
+  msgHolderEl.style.visibility = "visible";
+
+  // Listen to yes or no to restart the game
+  // let restartBtn = document.querySelectorAll("restartBtn");
+  msgBtnYes.addEventListener("click", function() {
+    reset();
+  });
+
+  msgBtnNo.addEventListener("click", function() {
+    window.location = "https://chasacademy.se/";
+  });
+}
+
+function youWon() {
+  disableLetters();
+  createMessage("Du vann!");
+  // console.log(selectedWord[i]);
+  
+}
+
+function gameOver() {
+  disableLetters();
+  createMessage("Bättre lycka nästa gång");
+}
+
+function enableLetters() {
+  letterButtonEls.forEach(letter => {
+    letter.disabled = false;
+  });
+}
+
+function disableLetters() {
+  letterButtonEls.forEach(letter => {
+    letter.disabled = true;
+  });
+}
+
+function reset() {
+  msgHolderEl.style.visibility = "hidden";
+  startGameBtnEl.disabled = false;
+  startGameBtnEl.innerHTML = "Starta spelet";
+  rightGuesses = 0;
+  guesses = 0;
+  hangmanImg.src = `images/h${guesses}.png`;
+  enableLetters();
+  startGame();
+}
 
 // Listen to clicks on letters
 letterButtonEls.forEach(letter => {
-
-  letter.addEventListener('click', function() {
-    console.log(letter.value);
+  letter.addEventListener("click", function() {
+    // console.log(selectedWord.split(''));
+    startGameBtnEl.disabled = true;
+    checkLetterValue2(selectedWord, letter, letter.value);
+    // letter.disabled = true;
   });
-  
 });
 
+// callback
+// 6.1 check letter value
+
+function checkLetterValue2(word, letter, letterValue) {
+  let selectedWordArray = word.split(""); // split word into array
+  selectedWordArray.pop(); // remove last position, unwanted " "
+  console.log(selectedWordArray);
+
+  if (
+    // Letter exists guesses lower than five and right guesses not equal to length of word
+    selectedWordArray.includes(letterValue) === true &&
+    guesses < 6 &&
+    selectedWordArray.length !== rightGuesses
+  ) {
+    // console.log(selectedWordArray.find(letterValue));
+    letter.disabled = true;
+    // Returns an array of positions in selectedWordArray where letterValue is present
+    getLetterIndex(selectedWordArray, letterValue);
+
+    rightGuesses = rightGuesses + letterIndex.length;
+
+    // Loop to display correctly guessed letters
+    for (let i = 0; i < letterIndex.length; i++) {
+      let pos = letterIndex[i];
+      letterBoxEls.childNodes[pos].firstChild.value = letterValue;
+    }
+
+    console.log(
+      `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
+    );
+
+    // Internal if to check if WIN
+    if (guesses < 6 && selectedWordArray.length === rightGuesses) {
+      youWon();
+    }
+  } else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
+    guesses++;
+    hangmanImg.src = `images/h${guesses}.png`;
+    console.log(guesses);
+
+    if (guesses === 6) {
+      console.log("You lose");
+      gameOver(); // write this function
+    }
+  }
+
+  // });
+}
+
+function getLetterIndex(array, value) {
+  letterIndex = [];
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === value) {
+      letterIndex.push(i);
+    }
+  }
+  return letterIndex;
+}
+
+/*
+      let letterPos = selectedWordArray.reduce(function (accumulator, letterValue, position) {
+        if (letterValue) {
+          let accumulator = accumulator.push(position);
+          return accumulator;
+        }
+      });
+      */
