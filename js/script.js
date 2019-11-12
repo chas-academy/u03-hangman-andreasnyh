@@ -105,7 +105,6 @@ function createLetterBoxes() {
 }
 
 function createMessage(message) {
-
   let msgArticle = document.createElement("article");
   let msgHeading = document.createElement("h2");
   let msgParagraph = document.createElement("p");
@@ -153,7 +152,6 @@ function youWon() {
   disableLetters();
   createMessage("Du vann!");
   // console.log(selectedWord[i]);
-  
 }
 
 function gameOver() {
@@ -185,7 +183,6 @@ function reset() {
   enableLetters();
   startGame();
 }
-
 
 // Listen to clicks on letters
 letterButtonEls.forEach(letter => {
@@ -258,10 +255,9 @@ function getLetterIndex(array, value) {
 }
 
 function displayWord() {
-
   for (let i = 0; i < selectedWord.length - 1; i++) {
     letterBoxEls.childNodes[i].firstChild.value = selectedWord[i];
-  }  
+  }
 }
 /*
       let letterPos = selectedWordArray.reduce(function (accumulator, letterValue, position) {
