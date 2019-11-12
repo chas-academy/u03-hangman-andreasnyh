@@ -35,6 +35,8 @@ xhr.onload = function() {
 };
 xhr.send();
 
+disableLetters(); // Disable letters on load
+
 /*
 function removeWordsContainingDash(item) {
   if (item.includes("-")) {
@@ -61,6 +63,7 @@ startGameBtnEl.addEventListener("click", startGame);
 
 function startGame() {
   startGameBtnEl.innerHTML = "Slumpa nytt ord";
+  enableLetters();
   generateRandomWord();
   createLetterBoxes();
 }
@@ -113,7 +116,7 @@ function createMessage(message) {
 
   msgArticle.setAttribute("id", "messageArticle");
 
-  msgHeading.innerText = message;
+  msgHeading.innerText = message; // win or loose message
   msgParagraph.innerText = "Vill du spela igen?";
   msgArticle.appendChild(msgHeading); // make the input a child of the list-element
   msgArticle.appendChild(msgParagraph); // make the input a child of the list-element
@@ -155,6 +158,7 @@ function youWon() {
 
 function gameOver() {
   disableLetters();
+  displayWord();
   createMessage("Bättre lycka nästa gång");
 }
 
@@ -172,6 +176,7 @@ function disableLetters() {
 
 function reset() {
   msgHolderEl.style.visibility = "hidden";
+  msgHolderEl.innerHTML = "";
   startGameBtnEl.disabled = false;
   startGameBtnEl.innerHTML = "Starta spelet";
   rightGuesses = 0;
@@ -180,6 +185,7 @@ function reset() {
   enableLetters();
   startGame();
 }
+
 
 // Listen to clicks on letters
 letterButtonEls.forEach(letter => {
@@ -197,7 +203,7 @@ letterButtonEls.forEach(letter => {
 function checkLetterValue2(word, letter, letterValue) {
   let selectedWordArray = word.split(""); // split word into array
   selectedWordArray.pop(); // remove last position, unwanted " "
-  console.log(selectedWordArray);
+  // console.log(selectedWordArray); // log array of individual letters
 
   if (
     // Letter exists guesses lower than five and right guesses not equal to length of word
@@ -229,11 +235,11 @@ function checkLetterValue2(word, letter, letterValue) {
   } else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
     guesses++;
     hangmanImg.src = `images/h${guesses}.png`;
-    console.log(guesses);
+    console.log(`${guesses} wrong guesses`);
 
     if (guesses === 6) {
       console.log("You lose");
-      gameOver(); // write this function
+      gameOver();
     }
   }
 
@@ -251,6 +257,12 @@ function getLetterIndex(array, value) {
   return letterIndex;
 }
 
+function displayWord() {
+
+  for (let i = 0; i < selectedWord.length - 1; i++) {
+    letterBoxEls.childNodes[i].firstChild.value = selectedWord[i];
+  }  
+}
 /*
       let letterPos = selectedWordArray.reduce(function (accumulator, letterValue, position) {
         if (letterValue) {
