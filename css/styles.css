@@ -4,6 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 body {
@@ -32,12 +33,13 @@ header {
 }
 
 header h1 {
-  margin: 0;
+  margin: .25em;
   font-size: 4.5em;
   text-align: center;
 }
 
 main {
+  position: relative;
   flex: 1;
   padding: 1.5em;
 }
@@ -78,13 +80,18 @@ ul {
 footer {
   background-color: silver;
   border-top: 1px solid #666;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   padding: 30px;
   color: #fff;
   font-size: 1.25em;
   width: 100%;
   flex: none;
   text-align: center;
+}
+
+img {
+  margin: 0 auto;
+  display: block;
 }
 
 #startGameBtn {
@@ -120,10 +127,11 @@ footer {
   font-size: 1.5em;
   font-weight: bold;
   line-height: 2em;
-  margin-top: 1em;
+  margin: 1em .1em;
   padding: 20px 5px;
   text-align: center;
   width: 2em;
+  z-index: 2; /* Make letters visible on win/lose */
 }
 
 #message {
@@ -132,7 +140,9 @@ footer {
   text-align: center;
   position: absolute;
   top: 0;
-  width: 98%;
+  left: 0;
+  right: 0;
+  bottom: 0;
   visibility: hidden;
   z-index: 1;
   display: flex;
@@ -140,11 +150,13 @@ footer {
 }
 
 #messageArticle {
-  margin-top: 50vh;
+  margin-top: 300px;
   width: max-content;
+  height: max-content;
   z-index: 1;
   position: relative;
-  background-color: whitesmoke;
+  background-color: rgba(245, 245, 245, .75);
+  border: 4px outset lightgray;
   padding: 2em;
 }
 
@@ -162,9 +174,9 @@ footer {
   position: absolute;
   background: rgba(155, 155, 155, 0.75);
   top: 0;
-  left: -1.5em;
-  bottom: -134vh;
-  right: -3px;
+  left: 0;
+  bottom: 0;
+  right: 0;
   z-index: 0;
 }
 
@@ -173,7 +185,7 @@ footer {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin: 1em;
+  margin: 2.5em 0 0 0;
   position: relative;
 }
 
