@@ -92,7 +92,8 @@ function createLetterBoxes() {
   letterBoxEls.innerHTML = "";
 
   // for (let i = 0; i < selectedWord.length - 1; i++) { // For live server
-  for (let i = 0; i < selectedWord.length; i++) { // For publication
+  for (let i = 0; i < selectedWord.length; i++) {
+    // For publication
     // console.log(selectedWord[i]);
     let liEl = document.createElement("li");
     let liElInput = document.createElement("input");
@@ -195,8 +196,6 @@ letterButtonEls.forEach(letter => {
   });
 });
 
-// callback
-// 6.1 check letter value
 
 function checkLetterValue2(word, letter, letterValue) {
   let selectedWordArray = word.split(""); // split word into array
@@ -210,7 +209,24 @@ function checkLetterValue2(word, letter, letterValue) {
     selectedWordArray.length !== rightGuesses
   ) {
     // console.log(selectedWordArray.find(letterValue));
+    // debugger;
+    if (letter.type === "keydown") {
+      console.log(`disable letter-button`);
+      letterButtonEls.forEach(letterButton => {
+        
+
+        if (letterButton.value === letterValue) {
+          // debugger;
+          console.log(letter);
+          
+          letter.removeEventListener("keydown", function);
+          // letter.disabled = true;
+          letterButton.disabled = true;
+        }
+      });
+    }
     letter.disabled = true;
+
     // Returns an array of positions in selectedWordArray where letterValue is present
     getLetterIndex(selectedWordArray, letterValue);
 
@@ -268,3 +284,25 @@ function displayWord() {
         }
       });
       */
+
+// å = 221
+// ä = 222
+// ö = 192
+addEventListener("keydown", function() {
+  if (
+    (event.keyCode >= 65 && event.keyCode <= 90) || //a - z
+    event.keyCode === 192 || // ö
+    event.keyCode === 221 || //å
+    event.keyCode === 222    // ä
+  ) {
+    console.log(event);
+    // console.log(event.keyCode);
+
+    let key = event.key;
+    key = key.toUpperCase();
+
+    console.log(`${key}: ${event.keyCode}`);
+    
+    checkLetterValue2(selectedWord, event, key);
+  }
+});
