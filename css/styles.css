@@ -33,7 +33,7 @@ header {
 }
 
 header h1 {
-  margin: .25em;
+  margin: 0.25em;
   font-size: 4.5em;
   text-align: center;
 }
@@ -127,7 +127,7 @@ img {
   font-size: 1.5em;
   font-weight: bold;
   line-height: 2em;
-  margin: 1em .1em;
+  margin: 1em 0.1em;
   padding: 20px 5px;
   text-align: center;
   width: 2em;
@@ -155,7 +155,7 @@ img {
   height: max-content;
   z-index: 1;
   position: relative;
-  background-color: rgba(245, 245, 245, .75);
+  background-color: rgba(245, 245, 245, 0.75);
   border: 4px outset lightgray;
   padding: 2em;
 }
