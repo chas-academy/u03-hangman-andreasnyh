@@ -90,7 +90,7 @@ footer {
 }
 
 img {
-  margin: 0 auto;
+  margin: 1em auto;
   display: block;
 }
 
@@ -282,4 +282,24 @@ img {
     transparent 5px
   );
   border-top: 1px solid #000;
+}
+
+/* #### MEDIARULES #### */
+
+@media screen and (min-width: 415px) {
+  #startGameBtn {
+    font-size: 4em;
+  }
+
+  #letterButtons button:not(last-child) {
+    max-width: 140px;
+    min-width: 140px;
+    /* padding: 1em 2em; */
+    margin-bottom: 0.5em;
+    font-size: 6em;
+  }
+
+  #letterBoxes input {
+  font-size: 2.5em;
+  }
 }
