@@ -91,7 +91,8 @@ Använd `.appendChild()` för att lägga till det skapade elementet inuti `lette
 function createLetterBoxes() {
   letterBoxEls.innerHTML = "";
 
-  for (let i = 0; i < selectedWord.length - 1; i++) {
+  // for (let i = 0; i < selectedWord.length - 1; i++) { // For live server
+  for (let i = 0; i < selectedWord.length; i++) { // For publication
     // console.log(selectedWord[i]);
     let liEl = document.createElement("li");
     let liElInput = document.createElement("input");
@@ -199,7 +200,7 @@ letterButtonEls.forEach(letter => {
 
 function checkLetterValue2(word, letter, letterValue) {
   let selectedWordArray = word.split(""); // split word into array
-  selectedWordArray.pop(); // remove last position, unwanted " "
+  // selectedWordArray.pop(); // remove last position, unwanted " "
   // console.log(selectedWordArray); // log array of individual letters
 
   if (
@@ -255,7 +256,7 @@ function getLetterIndex(array, value) {
 }
 
 function displayWord() {
-  for (let i = 0; i < selectedWord.length - 1; i++) {
+  for (let i = 0; i < selectedWord.length; i++) {
     letterBoxEls.childNodes[i].firstChild.value = selectedWord[i];
   }
 }
