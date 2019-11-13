@@ -297,21 +297,21 @@ img {
   }
 
   footer {
-    font-size: 3em;
+    font-size: 2em;
   }
 
   main article {
-    font-size: 1.75em;
+    font-size: 1.5em;
   }
   #startGameBtn {
-    font-size: 3em;
+    font-size: 2em;
   }
 
   #letterButtons button:not(last-child) {
-    min-width: 150px;
-    padding: 1.5em;
-    margin-bottom: 1em;
-    font-size: 2em;
+    min-width: 100px;
+    /* padding: 1em; */
+    margin-bottom: .5em;
+    font-size: 1.5em;
   }
 
   #letterBoxes input {
@@ -319,11 +319,11 @@ img {
   }
 
   #message {
-    font-size: 1.25em;
+    font-size: 1.5em;
   }
 
   .restartBtn {
-    font-size: 2em;
+    font-size: 1.25em;
   }
 }
 
