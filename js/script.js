@@ -13,6 +13,7 @@ let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-nod: knappe
 let letterButtonEls = document.querySelectorAll("#letterButtons button"); // Array av DOM-noder: Knapparna för bokstäverna
 let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array av DOM-noder: Rutorna där bokstäverna ska stå
 
+let buttonDisabled = false;
 // Funktion som startar spelet vid knapptryckning, och då tillkallas andra funktioner
 // Funktion som slumpar fram ett ord
 // Funktion som tar fram bokstävernas rutor, antal rutor beror på vilket ord slumpas fram
@@ -92,7 +93,8 @@ function createLetterBoxes() {
   letterBoxEls.innerHTML = "";
 
   // for (let i = 0; i < selectedWord.length - 1; i++) { // For live server
-  for (let i = 0; i < selectedWord.length; i++) { // For publication
+  for (let i = 0; i < selectedWord.length; i++) {
+    // For publication
     // console.log(selectedWord[i]);
     let liEl = document.createElement("li");
     let liElInput = document.createElement("input");
@@ -125,8 +127,10 @@ function createMessage(message) {
   msgBtnDiv.setAttribute("class", "messageBtnDiv");
 
   msgBtnYes.setAttribute("type", "button");
+  msgBtnYes.setAttribute("id", "btnYes");
   msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnYes.setAttribute("value", "JA");
+ 
 
   msgBtnNo.setAttribute("type", "button");
   msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
@@ -138,6 +142,7 @@ function createMessage(message) {
 
   msgHolderEl.style.visibility = "visible";
 
+  document.getElementById("btnYes").focus();
   // Listen to yes or no to restart the game
   // let restartBtn = document.querySelectorAll("restartBtn");
   msgBtnYes.addEventListener("click", function() {
@@ -150,12 +155,14 @@ function createMessage(message) {
 }
 
 function youWon() {
+  document.removeEventListener("keydown", keyListener);
   disableLetters();
   createMessage("Du vann!");
   // console.log(selectedWord[i]);
 }
 
 function gameOver() {
+  document.removeEventListener("keydown", keyListener);
   disableLetters();
   displayWord();
   createMessage("Bättre lycka nästa gång");
@@ -181,27 +188,29 @@ function reset() {
   rightGuesses = 0;
   guesses = 0;
   hangmanImg.src = `images/h${guesses}.png`;
+  buttonDisabled = false;
   enableLetters();
   startGame();
+  document.addEventListener("keydown", keyListener);
 }
 
 // Listen to clicks on letters
 letterButtonEls.forEach(letter => {
   letter.addEventListener("click", function() {
     // console.log(selectedWord.split(''));
-    startGameBtnEl.disabled = true;
+    
     checkLetterValue2(selectedWord, letter, letter.value);
     // letter.disabled = true;
   });
 });
 
-// callback
-// 6.1 check letter value
 
 function checkLetterValue2(word, letter, letterValue) {
   let selectedWordArray = word.split(""); // split word into array
   // selectedWordArray.pop(); // remove last position, unwanted " "
   // console.log(selectedWordArray); // log array of individual letters
+  startGameBtnEl.disabled = true;
+  letterValue = letterValue.toUpperCase();
 
   if (
     // Letter exists guesses lower than five and right guesses not equal to length of word
@@ -210,27 +219,43 @@ function checkLetterValue2(word, letter, letterValue) {
     selectedWordArray.length !== rightGuesses
   ) {
     // console.log(selectedWordArray.find(letterValue));
-    letter.disabled = true;
-    // Returns an array of positions in selectedWordArray where letterValue is present
-    getLetterIndex(selectedWordArray, letterValue);
+    // debugger;
+    
+    // disable button of pressed letter && letterButton.disabled === false
+    letterButtonEls.forEach(letterButton => {
+      if (letterButton.value === letterValue && letterButton.disabled === false) {
+        letterButton.disabled = true;
+        buttonDisabled = true;
 
-    rightGuesses = rightGuesses + letterIndex.length;
+            
+        // Returns an array of positions in selectedWordArray where letterValue is present
+        getLetterIndex(selectedWordArray, letterValue);
 
-    // Loop to display correctly guessed letters
-    for (let i = 0; i < letterIndex.length; i++) {
-      let pos = letterIndex[i];
-      letterBoxEls.childNodes[pos].firstChild.value = letterValue;
-    }
+        // Loop to display correctly guessed letters
+        for (let i = 0; i < letterIndex.length; i++) {
+          let pos = letterIndex[i];
+          letterBoxEls.childNodes[pos].firstChild.value = letterValue;
+        }
 
-    console.log(
-      `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
-    );
+        rightGuesses = rightGuesses + letterIndex.length;
 
-    // Internal if to check if WIN
-    if (guesses < 6 && selectedWordArray.length === rightGuesses) {
-      youWon();
-    }
-  } else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
+        console.log(
+          `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
+          );
+
+
+
+        // Internal if to check if WIN
+        if (guesses < 6 && selectedWordArray.length === rightGuesses) {
+          youWon();
+        }
+
+      }
+    });
+
+    // letter.disabled = true;
+  }
+  else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
     guesses++;
     hangmanImg.src = `images/h${guesses}.png`;
     console.log(`${guesses} wrong guesses`);
@@ -268,3 +293,26 @@ function displayWord() {
         }
       });
       */
+
+// å = 221
+// ä = 222
+// ö = 192
+
+const keyListener = function() {
+  if (
+    (event.keyCode >= 65 && event.keyCode <= 90) || //a - z
+    event.keyCode === 192 || // ö
+    event.keyCode === 221 || //å
+    event.keyCode === 222 // ä
+  ) {
+    // console.log(event);
+    // console.log(KeyboardEvent.key);
+
+    // let eventKey = event.key;
+    // eventKey = eventKey.toUpperCase();
+    // console.log(`${eventKey}: ${event.keyCode}`);
+
+    checkLetterValue2(selectedWord, event, event.key);
+  }
+};
+document.addEventListener("keydown", keyListener);

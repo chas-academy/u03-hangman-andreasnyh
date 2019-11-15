@@ -90,7 +90,7 @@ footer {
 }
 
 img {
-  margin: 0 auto;
+  margin: 1em auto;
   display: block;
 }
 
@@ -158,6 +158,10 @@ img {
   background-color: rgba(245, 245, 245, 0.75);
   border: 4px outset lightgray;
   padding: 2em;
+}
+
+#messageArticle h2 {
+  margin-bottom: 0.5em;
 }
 
 #messageArticle,
@@ -282,4 +286,113 @@ img {
     transparent 5px
   );
   border-top: 1px solid #000;
+}
+
+/* #### MEDIA RULES #### */
+
+@media screen and (min-width: 1025px) {
+  
+  img {
+    width: 40%;
+  }
+
+  footer {
+    font-size: 2em;
+  }
+
+  main article {
+    font-size: 1.5em;
+  }
+  #startGameBtn {
+    font-size: 2em;
+  }
+
+  #letterButtons button:not(last-child) {
+    min-width: 100px;
+    /* padding: 1em; */
+    margin-bottom: .5em;
+    font-size: 1.5em;
+  }
+
+  #letterBoxes input {
+    font-size: 2.64em;
+  }
+
+  #message {
+    font-size: 1.5em;
+  }
+
+  .restartBtn {
+    font-size: 1.25em;
+  }
+}
+
+@media screen and (min-width: 669px) and (max-width: 1025px) {
+
+  img {
+    width: 70%;
+  }
+
+  footer {
+    font-size: 3em;
+  }
+
+  main article {
+    font-size: 1.75em;
+  }
+  #startGameBtn {
+    font-size: 3em;
+  }
+
+  #letterButtons button:not(last-child) {
+    min-width: 190px;
+    padding: 1em;
+    margin-bottom: 1em;
+    font-size: 2em;
+  }
+
+  #letterBoxes input {
+    font-size: 2.64em;
+  }
+
+  #message {
+    font-size: 1.3em;
+  }
+
+  .restartBtn {
+    font-size: 2em;
+  }
+}
+
+@media screen and (min-width: 319px) and (max-width: 668px) {
+  img {
+    width: 70%;
+  }
+
+  footer {
+    font-size: 3em;
+  }
+
+  #startGameBtn {
+    font-size: 4em;
+  }
+
+  #letterButtons button:not(last-child) {
+    min-width: 170px;
+    /* padding: 1em 2em; */
+    margin-bottom: 0.5em;
+    font-size: 7em;
+  }
+
+  #letterBoxes input {
+    font-size: 3.3em;
+  }
+
+  #message {
+    font-size: 2.8em;
+  }
+
+  .restartBtn {
+    font-size: 2em;
+  }
 }
