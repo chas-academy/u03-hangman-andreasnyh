@@ -127,8 +127,10 @@ function createMessage(message) {
   msgBtnDiv.setAttribute("class", "messageBtnDiv");
 
   msgBtnYes.setAttribute("type", "button");
+  msgBtnYes.setAttribute("id", "btnYes");
   msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnYes.setAttribute("value", "JA");
+ 
 
   msgBtnNo.setAttribute("type", "button");
   msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
@@ -140,6 +142,7 @@ function createMessage(message) {
 
   msgHolderEl.style.visibility = "visible";
 
+  document.getElementById("btnYes").focus();
   // Listen to yes or no to restart the game
   // let restartBtn = document.querySelectorAll("restartBtn");
   msgBtnYes.addEventListener("click", function() {
