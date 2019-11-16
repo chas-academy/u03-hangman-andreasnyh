@@ -80,7 +80,6 @@ ul {
 footer {
   background-color: silver;
   border-top: 1px solid #666;
-  /* margin-top: 20px; */
   padding: 30px;
   color: #fff;
   font-size: 1.25em;
@@ -138,7 +137,6 @@ img {
 }
 
 #message {
-  /* padding: 20px; */
   font-size: 2em;
   text-align: center;
   position: absolute;
@@ -295,10 +293,6 @@ img {
 
 /* Laptop big */
 @media screen and (min-width: 1280px) and (max-width: 1441px) {
-  img {
-    /* width: 30%; */
-  }
-
   footer {
     font-size: 1.25em;
   }
@@ -318,7 +312,6 @@ img {
   #letterButtons button:not(last-child) {
     min-width: 120px;
     min-height: 80px;
-    /* padding: 1em; */
     margin-bottom: 0.5em;
     font-size: 2em;
   }
@@ -357,7 +350,6 @@ img {
   #letterButtons button:not(last-child) {
     min-width: 110px;
     min-height: initial;
-    /* padding: 1em; */
     margin-bottom: 0.5em;
     font-size: 1.5em;
   }
@@ -460,7 +452,6 @@ img {
     min-width: 40px;
     min-height: 40px;
     padding: 0;
-    /* margin-bottom: 1em; */
     font-size: 1.5em;
   }
 
