@@ -130,7 +130,6 @@ function createMessage(message) {
   msgBtnYes.setAttribute("id", "btnYes");
   msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnYes.setAttribute("value", "JA");
- 
 
   msgBtnNo.setAttribute("type", "button");
   msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
@@ -198,12 +197,11 @@ function reset() {
 letterButtonEls.forEach(letter => {
   letter.addEventListener("click", function() {
     // console.log(selectedWord.split(''));
-    
+
     checkLetterValue2(selectedWord, letter, letter.value);
     // letter.disabled = true;
   });
 });
-
 
 function checkLetterValue2(word, letter, letterValue) {
   let selectedWordArray = word.split(""); // split word into array
@@ -220,14 +218,17 @@ function checkLetterValue2(word, letter, letterValue) {
   ) {
     // console.log(selectedWordArray.find(letterValue));
     // debugger;
-    
+
     // disable button of pressed letter && letterButton.disabled === false
     letterButtonEls.forEach(letterButton => {
-      if (letterButton.value === letterValue && letterButton.disabled === false) {
+      // Check if the button has been disabled to stop being able to press the same correct key multiple times on the keyboard
+      if (
+        letterButton.value === letterValue &&
+        letterButton.disabled === false
+      ) {
         letterButton.disabled = true;
         buttonDisabled = true;
 
-            
         // Returns an array of positions in selectedWordArray where letterValue is present
         getLetterIndex(selectedWordArray, letterValue);
 
@@ -241,21 +242,17 @@ function checkLetterValue2(word, letter, letterValue) {
 
         console.log(
           `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
-          );
-
-
+        );
 
         // Internal if to check if WIN
         if (guesses < 6 && selectedWordArray.length === rightGuesses) {
           youWon();
         }
-
       }
     });
 
     // letter.disabled = true;
-  }
-  else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
+  } else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
     guesses++;
     hangmanImg.src = `images/h${guesses}.png`;
     console.log(`${guesses} wrong guesses`);
