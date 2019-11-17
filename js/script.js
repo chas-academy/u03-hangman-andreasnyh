@@ -1,33 +1,30 @@
-// Globala variabler
+// ################################ Global variables ################################### //
 
-//const wordList;      // Array: med spelets alla ord
-let selectedWord; // Sträng: ett av orden valt av en slumpgenerator från arrayen ovan
-let letterIndex = [];
+let selectedWord; // String: The chosen randomized word
+let letterIndex = []; // Array:  Holder for positions of correctly guessed letters
 
-let rightGuesses = 0;
-let guesses = 0; // Number: håller antalet gissningar som gjorts
-let hangmanImg = document.getElementById("hangman"); // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
+let rightGuesses = 0; // Number: Correct guesses
+let guesses = 0; // Number: Wrong guesses
 
-let msgHolderEl = document.getElementById("message"); // DOM-nod: Ger meddelande när spelet är över
-let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-nod: knappen som du startar spelet med
-let letterButtonEls = document.querySelectorAll("#letterButtons button"); // Array av DOM-noder: Knapparna för bokstäverna
-let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array av DOM-noder: Rutorna där bokstäverna ska stå
+let buttonDisabled = false; // Check if button has been disabled (keyboard support)
 
-let buttonDisabled = false;
-// Funktion som startar spelet vid knapptryckning, och då tillkallas andra funktioner
-// Funktion som slumpar fram ett ord
-// Funktion som tar fram bokstävernas rutor, antal rutor beror på vilket ord slumpas fram
-// Funktion som körs när du trycker på bokstäverna och gissar bokstav
-// Funktion som ropas vid vinst eller förlust, gör olika saker beroende tillståndet
-// Funktion som inaktiverar/aktiverar bokstavsknapparna beroende på vilken del av spelet du är på
+let hangmanImg = document.getElementById("hangman"); // DOM-node: Container of hangman image
+let msgHolderEl = document.getElementById("message"); // DOM-node: Container of win/lose message
+let startGameBtnEl = document.getElementById("startGameBtn"); // DOM-node: Start button
+let letterButtonEls = document.querySelectorAll("#letterButtons button"); // Array of DOM-nodes: A-Ö letter buttons
+let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array of DOM-nodes: Container for number of boxes = selectedWord.length
+
+disableLetters(); // Disable letterbuttons on load
+
+// ############################## Get words from file ############################## //
 
 // Get array of words from file
 let wordsFromTxt = null;
-const urlEng = "../assets/words.txt";
+const urlEng = "../assets/words.txt"; // English wordlist to be implemented
 const urlSwe = "../assets/wordsSWE.txt";
 
 let xhr = new XMLHttpRequest();
-xhr.open("GET", urlSwe, false); // False turns off asynchronous behaviour
+xhr.open("GET", urlSwe, false); // False turns off asynchronous behaviour and lets us do just one .send() and get all the words
 xhr.onload = function() {
   // wordsFromTxt = xhr.responseText;
   wordsFromTxt = xhr.responseText.toUpperCase();
@@ -36,28 +33,17 @@ xhr.onload = function() {
 };
 xhr.send();
 
-disableLetters(); // Disable letters on load
-
-/*
-function removeWordsContainingDash(item) {
-  if (item.includes("-")) {
-    splice(item, 1);
-  }
-  return;
-}
-*/
-// const wordList = wordsFromTxt.filter(removeWordsContainingDash);
-
-// Save wordsFromText items, that does not include a '-' in wordList
 wordsFromTxt = wordsFromTxt.filter(item => !item.includes("á"));
 wordsFromTxt = wordsFromTxt.filter(item => !item.includes("é"));
 wordsFromTxt = wordsFromTxt.filter(item => !item.includes("ó"));
-wordsFromTxt = wordsFromTxt.filter(item => !item.includes("'"));
 wordsFromTxt = wordsFromTxt.filter(item => !item.includes("ü"));
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("'"));
+wordsFromTxt = wordsFromTxt.filter(item => !item.includes("."));
+
+// Save wordsFromText items, that does not include '-' and the above in wordList
 const wordList = wordsFromTxt.filter(item => !item.includes("-"));
 
-// Log wordList array
-// console.log(wordList);
+// ############################## Functions and Listeners ############################## //
 
 // Listen for clicks on startbutton
 startGameBtnEl.addEventListener("click", startGame);
@@ -69,33 +55,23 @@ function startGame() {
   createLetterBoxes();
 }
 
-/*
-Skapa en funktion, kalla den för generateRandomWord().
-Inuti denna funktion returnera ett slumpat ord ur arrayen av ord (wordList):
-`wordList[Math.floor(Math.random()*wordList.length)];`
-*/
+// Get a random word from wordList
 function generateRandomWord() {
   selectedWord = wordList[Math.floor(Math.random() * wordList.length)];
-
-  // Disable the start button after click
-  // startGameBtnEl.disabled = true;
-  console.log(selectedWord);
+  // console.log(selectedWord);
   return selectedWord;
 }
 
-/*
-Baserat på längden i `selectedWord` (loopa/iterera):
-skapa ett nytt `<li>` element innehåller en `<input>`
-Använd `.appendChild()` för att lägga till det skapade elementet inuti `letterBoxEls`
-*/
-
+// Creates boxes for the individual letters in the selected word
 function createLetterBoxes() {
-  letterBoxEls.innerHTML = "";
+  letterBoxEls.innerHTML = ""; // Reset boxes
 
-  // for (let i = 0; i < selectedWord.length - 1; i++) { // For live server
+  /*
+  For the length of the word
+  Create a list-element containing an input
+  Append them to letterBoxEls (ul)
+  */
   for (let i = 0; i < selectedWord.length; i++) {
-    // For publication
-    // console.log(selectedWord[i]);
     let liEl = document.createElement("li");
     let liElInput = document.createElement("input");
     liElInput.setAttribute("type", "text");
@@ -107,47 +83,54 @@ function createLetterBoxes() {
   }
 }
 
+// Creates the message on win/lose
+// Message fed from youWon/gameOver functions
 function createMessage(message) {
   let msgArticle = document.createElement("article");
   let msgHeading = document.createElement("h2");
   let msgParagraph = document.createElement("p");
 
-  let msgBtnDiv = document.createElement("div");
-  let msgBtnYes = document.createElement("input");
-  let msgBtnNo = document.createElement("input");
+  let msgBtnDiv = document.createElement("div"); // Button container
+  let msgBtnYes = document.createElement("input"); // Restart? Yes-button
+  let msgBtnNo = document.createElement("input"); // Restart? No-button
 
   msgArticle.setAttribute("id", "messageArticle");
 
   msgHeading.innerText = message; // win or loose message
   msgParagraph.innerText = "Vill du spela igen?";
-  msgArticle.appendChild(msgHeading); // make the input a child of the list-element
-  msgArticle.appendChild(msgParagraph); // make the input a child of the list-element
-  msgHolderEl.appendChild(msgArticle); // make the list and input a child of letterbox
+  msgArticle.appendChild(msgHeading); // Append heading to article
+  msgArticle.appendChild(msgParagraph); // Append paragraph to article
+  msgHolderEl.appendChild(msgArticle); // Append article to message container
 
   msgBtnDiv.setAttribute("class", "messageBtnDiv");
 
+  // Attributes of Yes button
   msgBtnYes.setAttribute("type", "button");
   msgBtnYes.setAttribute("id", "btnYes");
   msgBtnYes.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnYes.setAttribute("value", "JA");
 
+  // Attributes of no button
   msgBtnNo.setAttribute("type", "button");
   msgBtnNo.setAttribute("class", "restartBtn btn btn--stripe");
   msgBtnNo.setAttribute("value", "NEJ");
 
-  msgBtnDiv.appendChild(msgBtnYes);
+  msgBtnDiv.appendChild(msgBtnYes); // Append buttons to container
   msgBtnDiv.appendChild(msgBtnNo);
-  msgArticle.appendChild(msgBtnDiv);
+  msgArticle.appendChild(msgBtnDiv); // Append button container to article
 
+  // Snow message element
   msgHolderEl.style.visibility = "visible";
 
+  // Make the yes-button take focus to be able to restart game with Enter-key
   document.getElementById("btnYes").focus();
-  // Listen to yes or no to restart the game
-  // let restartBtn = document.querySelectorAll("restartBtn");
+
+  // Listen to yes to restart the game
   msgBtnYes.addEventListener("click", function() {
     reset();
   });
 
+// Listen to no to leave the game
   msgBtnNo.addEventListener("click", function() {
     window.location = "https://chasacademy.se/";
   });
@@ -222,10 +205,7 @@ function checkLetterValue2(word, letter, letterValue) {
     // disable button of pressed letter && letterButton.disabled === false
     letterButtonEls.forEach(letterButton => {
       // Check if the button has been disabled to stop being able to press the same correct key multiple times on the keyboard
-      if (
-        letterButton.value === letterValue &&
-        letterButton.disabled === false
-      ) {
+      if (letterButton.value === letterValue && letterButton.disabled === false) {
         letterButton.disabled = true;
         buttonDisabled = true;
 
@@ -240,9 +220,7 @@ function checkLetterValue2(word, letter, letterValue) {
 
         rightGuesses = rightGuesses + letterIndex.length;
 
-        console.log(
-          `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`
-        );
+        console.log(`You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`);
 
         // Internal if to check if WIN
         if (guesses < 6 && selectedWordArray.length === rightGuesses) {
@@ -282,14 +260,6 @@ function displayWord() {
     letterBoxEls.childNodes[i].firstChild.value = selectedWord[i];
   }
 }
-/*
-      let letterPos = selectedWordArray.reduce(function (accumulator, letterValue, position) {
-        if (letterValue) {
-          let accumulator = accumulator.push(position);
-          return accumulator;
-        }
-      });
-      */
 
 // å = 221
 // ä = 222
@@ -302,13 +272,6 @@ const keyListener = function() {
     event.keyCode === 221 || //å
     event.keyCode === 222 // ä
   ) {
-    // console.log(event);
-    // console.log(KeyboardEvent.key);
-
-    // let eventKey = event.key;
-    // eventKey = eventKey.toUpperCase();
-    // console.log(`${eventKey}: ${event.keyCode}`);
-
     checkLetterValue2(selectedWord, event, event.key);
   }
 };

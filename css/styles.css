@@ -212,7 +212,7 @@ img {
 .btn {
   -moz-user-select: text;
   background-color: #fff;
-  /* background: transparent; */
+  background: rgba(245, 245, 245, 0.7);
   border-radius: 6px;
   border: 0;
   border: 2px solid #666;
@@ -269,7 +269,7 @@ img {
 }
 
 .btn--stripe:disabled {
-  background-color: #999;
+  background-color:  rgba(153, 153, 153, 0.7);
   color: #fff;
   border-color: #666;
 }
