@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 // ###################### Global variables ######################### //
 
-let selectedWord; // String: The chosen randomized word
+let selectedWord = ''; // String: The chosen randomized word
 let letterIndex = []; // Array: Positions of correctly guessed letters
 
 let rightGuesses = 0; // Number: Correct guesses
