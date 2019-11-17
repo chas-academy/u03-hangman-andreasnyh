@@ -94,14 +94,17 @@ img {
   width: 30%;
 }
 
+/* Start the game button */
 #startGameBtn {
   font-size: 3em;
 }
 
+/* Container for letterboxes and letterbuttons */
 #gameBoard {
   padding: 10px 0;
 }
 
+/* UL containing buttons with letters */
 #letterButtons {
   display: inline-flex;
   list-style-type: none;
@@ -110,6 +113,7 @@ img {
   align-items: center;
 }
 
+/* letterbutton sizing */
 #letterButtons button:not(last-child) {
   margin: 4px 4px;
   cursor: pointer;
@@ -123,6 +127,7 @@ img {
   display: inline-flex;
 }
 
+/* Letterboxes sizing and style */
 #letterBoxes input {
   border: 1px solid #666;
   color: #666;
@@ -136,6 +141,7 @@ img {
   z-index: 2; /* Make letters visible on win/lose */
 }
 
+/* Win or lose message container */
 #message {
   font-size: 2em;
   text-align: center;
@@ -150,6 +156,7 @@ img {
   justify-content: center;
 }
 
+/* Win or lose message */
 #messageArticle {
   margin-top: 410px;
   width: max-content;
@@ -174,6 +181,7 @@ img {
   position: relative;
 }
 
+/* Win or lose message background */
 #message::after {
   content: "";
   position: absolute;
@@ -185,6 +193,7 @@ img {
   z-index: 0;
 }
 
+/* Yes & no buttons for restart */
 .messageBtnDiv {
   display: flex;
   flex-direction: row;
@@ -194,6 +203,7 @@ img {
   position: relative;
 }
 
+/* Margin between buttons in message */
 .restartBtn + .restartBtn {
   margin-left: 1em;
   position: relative;
@@ -202,7 +212,7 @@ img {
 .btn {
   -moz-user-select: text;
   background-color: #fff;
-  background: transparent;
+  /* background: transparent; */
   border-radius: 6px;
   border: 0;
   border: 2px solid #666;
@@ -367,7 +377,7 @@ img {
   }
 }
 
-/* Tablet */
+/* Tablet Portrait */
 @media screen and (min-width: 768px) and (max-width: 1025px) {
   header h1 {
     font-size: 4em;
@@ -379,7 +389,7 @@ img {
     width: 90%;
     left: 50%;
     transform: translate(-50%, 0);
-    opacity: 50%;
+    /* opacity: 50%; */
   }
 
   footer {
@@ -397,7 +407,7 @@ img {
   #letterButtons button:not(last-child) {
     min-width: 100px;
     padding: 0em;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
     font-size: 2em;
   }
 
@@ -418,7 +428,18 @@ img {
   }
 }
 
-/* Phone */
+/* Tablet landscape */
+@media screen and (orientation: landscape) and (min-width: 768px) and (max-width: 1025px) {
+  img {
+    width: 55%;
+  }
+
+  #messageArticle {
+    margin-top: 10px;
+  }
+}
+
+/* Phone Portrait */
 @media screen and (min-width: 300px) and (max-width: 767px) {
   header h1 {
     font-size: 1.5em;
@@ -436,7 +457,7 @@ img {
     width: 85%;
     left: 50%;
     transform: translate(-50%, 0);
-    opacity: 50%;
+    /* opacity: 50%; */
   }
 
   footer {
@@ -470,5 +491,16 @@ img {
 
   .restartBtn {
     font-size: 1em;
+  }
+}
+
+/* Phone Portrait */
+@media screen and (min-width: 300px) and (max-width: 767px) {
+  img {
+    width: 37%;
+  }
+
+  #messageArticle {
+    margin-top: 10px;
   }
 }
