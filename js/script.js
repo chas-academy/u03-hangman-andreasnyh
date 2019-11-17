@@ -7,9 +7,6 @@ let letterIndex = []; // Array: Positions of correctly guessed letters
 let rightGuesses = 0; // Number: Correct guesses
 let guesses = 0; // Number: Wrong guesses
 
-// Check if button has been disabled (keyboard support)
-let buttonDisabled = false;
-
 // DOM-node: Container of hangman image
 const hangmanImg = document.getElementById('hangman');
 // DOM-node: Container of win/lose message
@@ -21,13 +18,23 @@ const letterButtonEls = document.querySelectorAll('#letterButtons button');
 // Array of DOM-nodes: Container for number of boxes = selectedWord.length
 const letterBoxEls = document.querySelector('#letterBoxes > ul');
 
-disableLetters(); // Disable letterbuttons on load
+// Constant with function to filter keyboard presses to only 'A-Ö'
+const keyListener = function() {
+  if (
+    (event.keyCode >= 65 && event.keyCode <= 90) || // a - z
+    event.keyCode === 192 || // ö
+    event.keyCode === 221 || // å
+    event.keyCode === 222 // ä
+  ) {
+    checkLetterValue2(selectedWord, event, event.key);
+  }
+};
 
 // #################### Get words from file #################### //
 
 // Get array of words from file
 let wordsFromTxt = null;
-// const urlEng = '../assets/words.txt'; // English wordlist to be implemented
+// const urlEng = '../assets/words.txt'; // English words to be implemented
 const urlSwe = '../assets/wordsSWE.txt';
 
 const xhr = new XMLHttpRequest();
@@ -55,8 +62,11 @@ const wordList = wordsFromTxt.filter((item) => !item.includes('-'));
 
 // #################### Functions and Listeners #################### //
 
-// Listen for clicks on startbutton
+disableLetters(); // Disable letter-buttons on load
+
+// Listen for clicks on start-button and keyboard
 startGameBtnEl.addEventListener('click', startGame);
+document.addEventListener('keydown', keyListener);
 
 function startGame() {
   startGameBtnEl.innerHTML = 'Slumpa nytt ord';
@@ -65,9 +75,7 @@ function startGame() {
   createLetterBoxes();
 }
 
-/*
-Get a random word from wordList
-*/
+// Get a random word from wordList
 function generateRandomWord() {
   selectedWord = wordList[Math.floor(Math.random() * wordList.length)];
   // console.log(selectedWord);
@@ -91,7 +99,7 @@ function createLetterBoxes() {
     liElInput.setAttribute('placeholder', '__');
     liElInput.setAttribute('disabled', '');
     liEl.appendChild(liElInput); // make the input a child of the list-element
-    letterBoxEls.appendChild(liEl); // make the list and input a child of letterbox
+    letterBoxEls.appendChild(liEl); // make list and input a child of letterbox
   }
 }
 
@@ -149,17 +157,18 @@ function createMessage(message) {
 }
 
 function youWon() {
+  // Remove listeners for keyboard
   document.removeEventListener('keydown', keyListener);
-  disableLetters();
-  createMessage('Du vann!');
-  // console.log(selectedWord[i]);
+  disableLetters(); // Disable letter-buttons
+  createMessage('Du vann!'); // Create Message overlay
 }
 
 function gameOver() {
+  // Remove listeners for keyboard
   document.removeEventListener('keydown', keyListener);
-  disableLetters();
-  displayWord();
-  createMessage('Bättre lycka nästa gång');
+  disableLetters(); // Disable letter-buttons
+  displayWord(); // Show the word
+  createMessage('Bättre lycka nästa gång'); // Create Message overlay
 }
 
 function enableLetters() {
@@ -174,6 +183,7 @@ function disableLetters() {
   });
 }
 
+// Reset game after win/lose
 function reset() {
   msgHolderEl.style.visibility = 'hidden';
   msgHolderEl.innerHTML = '';
@@ -182,7 +192,6 @@ function reset() {
   rightGuesses = 0;
   guesses = 0;
   hangmanImg.src = `images/h${guesses}.png`;
-  buttonDisabled = false;
   enableLetters();
   startGame();
   document.addEventListener('keydown', keyListener);
@@ -191,52 +200,62 @@ function reset() {
 // Listen to clicks on letters
 letterButtonEls.forEach((letter) => {
   letter.addEventListener('click', function() {
-    // console.log(selectedWord.split(''));
-
     checkLetterValue2(selectedWord, letter, letter.value);
-    // letter.disabled = true;
   });
 });
 
+// Check if letter matches letter in word(selectedWord, event, event.key)
 function checkLetterValue2(word, letter, letterValue) {
   const selectedWordArray = word.split(''); // split word into array
-  // selectedWordArray.pop(); // remove last position, unwanted " "
-  // console.log(selectedWordArray); // log array of individual letters
-  startGameBtnEl.disabled = true;
+  startGameBtnEl.disabled = true; // disable start button to lock word
+  // Make letterValue uppercase to match with letter-buttons.value
   letterValue = letterValue.toUpperCase();
 
+  /*
+  Letter exists
+  Guesses lower than six
+  Right guesses not equal to length of word
+  */
   if (
-    // Letter exists guesses lower than five and right guesses not equal to length of word
     selectedWordArray.includes(letterValue) === true &&
     guesses < 6 &&
     selectedWordArray.length !== rightGuesses
   ) {
-    // console.log(selectedWordArray.find(letterValue));
-    // debugger;
-
-    // disable button of pressed letter && letterButton.disabled === false
+    /*
+    For each letter-button
+    Check if button has been disabled
+    to stop being able to press the same
+    correct key multiple times on the keyboard
+    */
     letterButtonEls.forEach((letterButton) => {
-      // Check if the button has been disabled to stop being able to press the same correct key multiple times on the keyboard
+      // if correct letter && button not disabled
       if (
         letterButton.value === letterValue &&
         letterButton.disabled === false
       ) {
+        // Disable the button
         letterButton.disabled = true;
-        buttonDisabled = true;
 
-        // Returns an array of positions in selectedWordArray where letterValue is present
+        /*
+        Returns an array of positions in selectedWordArray
+        where letterValue is present
+        */
         getLetterIndex(selectedWordArray, letterValue);
 
         // Loop to display correctly guessed letters
         for (let i = 0; i < letterIndex.length; i++) {
           const pos = letterIndex[i];
+          // Assign the correct input the value of the guessed letter
           letterBoxEls.childNodes[pos].firstChild.value = letterValue;
         }
 
+        // Update the number of correct guesses
         rightGuesses = rightGuesses + letterIndex.length;
 
+        // log guessed letter and number of right guesses
         console.log(
-            `You guessed: ${letterValue} for a total of ${rightGuesses} correct guesses`,
+            `You guessed: ${letterValue} for a total`,
+            `of ${rightGuesses} correct guesses.`,
         );
 
         // Internal if to check if WIN
@@ -245,26 +264,33 @@ function checkLetterValue2(word, letter, letterValue) {
         }
       }
     });
-
-    // letter.disabled = true;
+    /*
+  IF the selected word does not contain the guess letter
+  and guesses is lower than 6
+  */
   } else if (selectedWordArray.includes(letterValue) === false && guesses < 6) {
-    guesses++;
-    hangmanImg.src = `images/h${guesses}.png`;
-    console.log(`${guesses} wrong guesses`);
+    guesses++; // Increment wrong guesses
+    hangmanImg.src = `images/h${guesses}.png`; // Update image
 
+    console.log(`${guesses} wrong guesses`); // log wrong guess
+
+    // Internal if to check if gameOver
     if (guesses === 6) {
       console.log('You lose');
       gameOver();
     }
   }
-
-  // });
 }
 
+// (array of letters, letter)
 function getLetterIndex(array, value) {
-  letterIndex = [];
+  letterIndex = []; // Empty the array
 
   for (let i = 0; i < array.length; i++) {
+    /*
+    If the position in the array has the same value as value
+    Push that position to the array
+    */
     if (array[i] === value) {
       letterIndex.push(i);
     }
@@ -272,24 +298,9 @@ function getLetterIndex(array, value) {
   return letterIndex;
 }
 
+// Print the word if you lost the game
 function displayWord() {
   for (let i = 0; i < selectedWord.length; i++) {
     letterBoxEls.childNodes[i].firstChild.value = selectedWord[i];
   }
 }
-
-// å = 221
-// ä = 222
-// ö = 192
-
-const keyListener = function() {
-  if (
-    (event.keyCode >= 65 && event.keyCode <= 90) || // a - z
-    event.keyCode === 192 || // ö
-    event.keyCode === 221 || // å
-    event.keyCode === 222 // ä
-  ) {
-    checkLetterValue2(selectedWord, event, event.key);
-  }
-};
-document.addEventListener('keydown', keyListener);
