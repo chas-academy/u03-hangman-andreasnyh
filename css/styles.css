@@ -494,7 +494,7 @@ img {
   }
 }
 
-/* Phone Portrait */
+/* Phone Landscape */
 @media screen and (orientation: landscape) and (min-width: 300px) and (max-width: 767px) {
   img {
     width: 37%;
