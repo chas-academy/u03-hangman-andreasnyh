@@ -26,7 +26,7 @@ const keyListener = function() {
     event.keyCode === 221 || // å
     event.keyCode === 222 // ä
   ) {
-    checkLetterValue2(selectedWord, event, event.key);
+    checkLetterValue(selectedWord, event, event.key);
   }
 };
 
@@ -200,12 +200,12 @@ function reset() {
 // Listen to clicks on letters
 letterButtonEls.forEach((letter) => {
   letter.addEventListener('click', function() {
-    checkLetterValue2(selectedWord, letter, letter.value);
+    checkLetterValue(selectedWord, letter, letter.value);
   });
 });
 
 // Check if letter matches letter in word(selectedWord, event, event.key)
-function checkLetterValue2(word, letter, letterValue) {
+function checkLetterValue(word, letter, letterValue) {
   const selectedWordArray = word.split(''); // split word into array
   startGameBtnEl.disabled = true; // disable start button to lock word
   // Make letterValue uppercase to match with letter-buttons.value
