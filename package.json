@@ -1,0 +1,23 @@
+{
+  "name": "u03-hangman-andreasnyh",
+  "version": "1.0.0",
+  "description": "hangman game",
+  "main": "./js/script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chas-academy/u03-hangman-andreasnyh.git"
+  },
+  "author": "Andréas Ny <andreas.ny@chasacademy.se>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/chas-academy/u03-hangman-andreasnyh/issues"
+  },
+  "homepage": "https://github.com/chas-academy/u03-hangman-andreasnyh#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
